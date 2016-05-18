@@ -1,5 +1,10 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%
+    String path = request.getContextPath();
+    String basePath = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort() + path + "/";
+    HttpSession s = request.getSession();
+%>
 <!DOCTYPE HTML>
 <html>
 <head>
@@ -85,16 +90,22 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
             <section class="sky-form">
                 <h4>学历</h4>
                 <div class="col col-4">
-                    <label class="checkbox"><input type="checkbox" name="checkbox" checked=""><i></i>不限</label>
+                    <label class="checkbox"><input type="radio" name="education" checked=""><i></i>不限</label>
                 </div>
                 <div class="col col-4" >
-                    <label class="checkbox"><input type="checkbox" name="checkbox"><i></i>初中</label>
-                    <label class="checkbox"><input type="checkbox" name="checkbox"><i></i>中专/中技</label>
-                    <label class="checkbox"><input type="checkbox" name="checkbox"><i></i>高中</label>
-                    <label class="checkbox"><input type="checkbox" name="checkbox"><i></i>大专</label>
-                    <label class="checkbox"><input type="checkbox" name="checkbox"><i></i>本科</label>
-                    <label class="checkbox"><input type="checkbox" name="checkbox"><i></i>硕士</label>
-                    <label class="checkbox"><input type="checkbox" name="checkbox"><i></i>博士</label>
+                    <label class="checkbox"><input type="radio" name="education"
+                                                   onclick="listfilter('初中')"><i></i>初中</label>
+                    <label class="checkbox"><input type="radio" name="education" onclick="listfilter('中专')"><i></i>中专/中技</label>
+                    <label class="checkbox"><input type="radio" name="education"
+                                                   onclick="listfilter('高中')"><i></i>高中</label>
+                    <label class="checkbox"><input type="radio" name="education"
+                                                   onclick="listfilter('大专')"><i></i>大专</label>
+                    <label class="checkbox"><input type="radio" name="education"
+                                                   onclick="listfilter('本科')"><i></i>本科</label>
+                    <label class="checkbox"><input type="radio" name="education"
+                                                   onclick="listfilter('硕士')"><i></i>硕士</label>
+                    <label class="checkbox"><input type="radio" name="education"
+                                                   onclick="listfilter('博士')"><i></i>博士</label>
                 </div>
             </section>
             <section class="sky-form">
@@ -160,690 +171,43 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
             <div class="resp-tabs-container" style="display:block;">
             <div class="tab-1 resp-tab-content" aria-labelledby="tab_item-0">
                 <ul class="tab_img">
-                    <c:forEach items="${result}" var="job" varStatus="status">
-                    <li><a href="${job.url}">
-                        <div class="tab_desc">
-                            <h3 style="overflow: hidden;white-space: nowrap;text-overflow: ellipsis;">${job.name}</h3>
-                            <h4>人数：20人以下</h4>
-                            <h4>工资：${job.salary}</h4>
-                            <h4>${job.salary}</h4>
-                            <h4>${job.officalName}</h4>
-                        </div>
-                    </a></li>
-                    </c:forEach>
+                    <%--<c:forEach items="${result}" var="job" varStatus="status">--%>
+                    <%--<li><a href="${job.url}">--%>
+                    <%--<div class="tab_desc">--%>
+                    <%--<h3 style="overflow: hidden;white-space: nowrap;text-overflow: ellipsis;">${job.name}</h3>--%>
+                    <%--<h4>人数：20人以下</h4>--%>
+                    <%--<h4>工资：${job.salary}</h4>--%>
+                    <%--<h4>${job.salary}</h4>--%>
+                    <%--<h4>${job.officalName}</h4>--%>
+                    <%--</div>--%>
+                    <%--</a></li>--%>
+                    <%--</c:forEach>--%>
 
 
                     <div class="clearfix"></div>
                 </ul>
             </div>
 
-            <!--
-            <div class="tab-1 resp-tab-content" aria-labelledby="tab_item-1">
-               <ul class="tab_img">
-                 <li><a href="single.html">
-                    <img src="images/pic30.jpg" class="img-responsive" alt=""/>
-                    <div class="tab_desc">
-                       <p>There are many variations</p>
-                       <h4>#25478921</h4>
-                    </div>
-                  </a></li>
-                  <li><a href="single.html">
-                    <img src="images/pic31.jpg" class="img-responsive" alt=""/>
-                    <div class="tab_desc">
-                       <p>There are many variations</p>
-                       <h4>#25478921</h4>
-                    </div>
-                  </a></li>
-                   <li><a href="single.html">
-                    <img src="images/pic32.jpg" class="img-responsive" alt=""/>
-                    <div class="tab_desc">
-                       <p>There are many variations</p>
-                       <h4>#25478921</h4>
-                    </div>
-                  </a></li>
-                   <li><a href="single.html">
-                    <img src="images/pic33.jpg" class="img-responsive" alt=""/>
-                    <div class="tab_desc">
-                       <p>There are many variations</p>
-                       <h4>#25478921</h4>
-                    </div>
-                  </a></li>
-                  <li><a href="single.html">
-                    <img src="images/pic34.jpg" class="img-responsive" alt=""/>
-                    <div class="tab_desc">
-                       <p>There are many variations</p>
-                       <h4>#25478921</h4>
-                    </div>
-                  </a></li>
-                  <li class="last"><a href="single.html">
-                    <img src="images/pic35.jpg" class="img-responsive" alt=""/>
-                    <div class="tab_desc">
-                       <p>There are many variations</p>
-                       <h4>#25478921</h4>
-                    </div>
-                  </a></li>
-                  <li><a href="single.html">
-                    <img src="images/pic36.jpg" class="img-responsive" alt=""/>
-                    <div class="tab_desc">
-                       <p>There are many variations</p>
-                       <h4>#25478921</h4>
-                    </div>
-                  </a></li>
-                  <li><a href="single.html">
-                    <img src="images/pic37.jpg" class="img-responsive" alt=""/>
-                    <div class="tab_desc">
-                       <p>There are many variations</p>
-                       <h4>#25478921</h4>
-                    </div>
-                  </a></li>
-                  <li><a href="single.html">
-                    <img src="images/pic38.jpg" class="img-responsive" alt=""/>
-                    <div class="tab_desc">
-                       <p>There are many variations</p>
-                       <h4>#25478921</h4>
-                    </div>
-                  </a></li>
-                  <li><a href="single.html">
-                    <img src="images/pic39.jpg" class="img-responsive" alt=""/>
-                    <div class="tab_desc">
-                       <p>There are many variations</p>
-                       <h4>#25478921</h4>
-                    </div>
-                  </a></li>
-                  <li><a href="single.html">
-                    <img src="images/pic10.jpg" class="img-responsive" alt=""/>
-                    <div class="tab_desc">
-                       <p>There are many variations</p>
-                       <h4>#25478921</h4>
-                    </div>
-                  </a></li>
-                  <li class="last"><a href="single.html">
-                    <img src="images/pic11.jpg" class="img-responsive" alt=""/>
-                    <div class="tab_desc">
-                       <p>There are many variations</p>
-                       <h4>#25478921</h4>
-                    </div>
-                  </a></li>
-                  <li><a href="single.html">
-                    <img src="images/pic12.jpg" class="img-responsive" alt=""/>
-                    <div class="tab_desc">
-                       <p>There are many variations</p>
-                       <h4>#25478921</h4>
-                    </div>
-                  </a></li>
-                  <li><a href="single.html">
-                    <img src="images/pic13.jpg" class="img-responsive" alt=""/>
-                    <div class="tab_desc">
-                       <p>There are many variations</p>
-                       <h4>#25478921</h4>
-                    </div>
-                  </a></li>
-                  <li><a href="single.html">
-                    <img src="images/pic14.jpg" class="img-responsive" alt=""/>
-                    <div class="tab_desc">
-                       <p>There are many variations</p>
-                       <h4>#25478921</h4>
-                    </div>
-                  </a></li>
-                  <li><a href="single.html">
-                    <img src="images/pic15.jpg" class="img-responsive" alt=""/>
-                    <div class="tab_desc">
-                       <p>There are many variations</p>
-                       <h4>#25478921</h4>
-                    </div>
-                  </a></li>
-                  <li><a href="single.html">
-                    <img src="images/pic16.jpg" class="img-responsive" alt=""/>
-                    <div class="tab_desc">
-                       <p>There are many variations</p>
-                       <h4>#25478921</h4>
-                    </div>
-                  </a></li>
-                  <li class="last"><a href="single.html">
-                    <img src="images/pic17.jpg" class="img-responsive" alt=""/>
-                    <div class="tab_desc">
-                       <p>There are many variations</p>
-                       <h4>#25478921</h4>
-                    </div>
-                  </a></li>
-                  <li><a href="single.html">
-                    <img src="images/pic18.jpg" class="img-responsive" alt=""/>
-                    <div class="tab_desc">
-                       <p>There are many variations</p>
-                       <h4>#25478921</h4>
-                    </div>
-                  </a></li>
-                  <li><a href="single.html">
-                    <img src="images/pic19.jpg" class="img-responsive" alt=""/>
-                    <div class="tab_desc">
-                       <p>There are many variations</p>
-                       <h4>#25478921</h4>
-                    </div>
-                  </a></li>
-                  <li><a href="single.html">
-                    <img src="images/pic20.jpg" class="img-responsive" alt=""/>
-                    <div class="tab_desc">
-                       <p>There are many variations</p>
-                       <h4>#25478921</h4>
-                    </div>
-                  </a></li>
-                  <li><a href="single.html">
-                    <img src="images/pic21.jpg" class="img-responsive" alt=""/>
-                    <div class="tab_desc">
-                       <p>There are many variations</p>
-                       <h4>#25478921</h4>
-                    </div>
-                  </a></li>
-                  <li><a href="single.html">
-                    <img src="images/pic22.jpg" class="img-responsive" alt=""/>
-                    <div class="tab_desc">
-                       <p>There are many variations</p>
-                       <h4>#25478921</h4>
-                    </div>
-                  </a></li>
-                  <li class="last"><a href="single.html">
-                    <img src="images/pic23.jpg" class="img-responsive" alt=""/>
-                    <div class="tab_desc">
-                       <p>There are many variations</p>
-                       <h4>#25478921</h4>
-                    </div>
-                  </a></li>
-                  <li><a href="single.html">
-                    <img src="images/pic24.jpg" class="img-responsive" alt=""/>
-                    <div class="tab_desc">
-                       <p>There are many variations</p>
-                       <h4>#25478921</h4>
-                    </div>
-                  </a></li>
-                  <li><a href="single.html">
-                    <img src="images/pic25.jpg" class="img-responsive" alt=""/>
-                    <div class="tab_desc">
-                       <p>There are many variations</p>
-                       <h4>#25478921</h4>
-                    </div>
-                  </a></li>
-                  <li><a href="single.html">
-                    <img src="images/pic26.jpg" class="img-responsive" alt=""/>
-                    <div class="tab_desc">
-                       <p>There are many variations</p>
-                       <h4>#25478921</h4>
-                    </div>
-                  </a></li>
-                  <li><a href="single.html">
-                    <img src="images/pic27.jpg" class="img-responsive" alt=""/>
-                    <div class="tab_desc">
-                       <p>There are many variations</p>
-                       <h4>#25478921</h4>
-                    </div>
-                  </a></li>
-                  <li><a href="single.html">
-                    <img src="images/pic28.jpg" class="img-responsive" alt=""/>
-                    <div class="tab_desc">
-                       <p>There are many variations</p>
-                       <h4>#25478921</h4>
-                    </div>
-                  </a></li>
-                  <li class="last"><a href="single.html">
-                    <img src="images/pic29.jpg" class="img-responsive" alt=""/>
-                    <div class="tab_desc">
-                       <p>There are many variations</p>
-                       <h4>#25478921</h4>
-                    </div>
-                  </a></li>
-                  <div class="clearfix"></div>
-               </ul>
-            </div>	-->
-            <!--
-            <div class="tab-1 resp-tab-content" aria-labelledby="tab_item-2">
-               <ul class="tab_img">
-                 <li><a href="single.html">
-                    <img src="images/pic40.jpg" class="img-responsive" alt=""/>
-                    <div class="tab_desc">
-                       <p>There are many variations</p>
-                       <h4>#25478921</h4>
-                    </div>
-                  </a></li>
-                   <li><a href="single.html">
-                    <img src="images/pic2.jpg" class="img-responsive" alt=""/>
-                    <div class="tab_desc">
-                       <p>There are many variations</p>
-                       <h4>#25478921</h4>
-                    </div>
-                  </a></li>
-                   <li><a href="single.html">
-                    <img src="images/pic3.jpg" class="img-responsive" alt=""/>
-                    <div class="tab_desc">
-                       <p>There are many variations</p>
-                       <h4>#25478921</h4>
-                    </div>
-                  </a></li>
-                   <li><a href="single.html">
-                    <img src="images/pic4.jpg" class="img-responsive" alt=""/>
-                    <div class="tab_desc">
-                       <p>There are many variations</p>
-                       <h4>#25478921</h4>
-                    </div>
-                  </a></li>
-                  <li><a href="single.html">
-                    <img src="images/pic5.jpg" class="img-responsive" alt=""/>
-                    <div class="tab_desc">
-                       <p>There are many variations</p>
-                       <h4>#25478921</h4>
-                    </div>
-                  </a></li>
-                  <li class="last"><a href="single.html">
-                    <img src="images/pic6.jpg" class="img-responsive" alt=""/>
-                    <div class="tab_desc">
-                       <p>There are many variations</p>
-                       <h4>#25478921</h4>
-                    </div>
-                  </a></li>
-                  <li><a href="single.html">
-                    <img src="images/pic6.jpg" class="img-responsive" alt=""/>
-                    <div class="tab_desc">
-                       <p>There are many variations</p>
-                       <h4>#25478921</h4>
-                    </div>
-                  </a></li>
-                  <li><a href="single.html">
-                    <img src="images/pic7.jpg" class="img-responsive" alt=""/>
-                    <div class="tab_desc">
-                       <p>There are many variations</p>
-                       <h4>#25478921</h4>
-                    </div>
-                  </a></li>
-                  <li><a href="single.html">
-                    <img src="images/pic8.jpg" class="img-responsive" alt=""/>
-                    <div class="tab_desc">
-                       <p>There are many variations</p>
-                       <h4>#25478921</h4>
-                    </div>
-                  </a></li>
-                  <li><a href="single.html">
-                    <img src="images/pic9.jpg" class="img-responsive" alt=""/>
-                    <div class="tab_desc">
-                       <p>There are many variations</p>
-                       <h4>#25478921</h4>
-                    </div>
-                  </a></li>
-                  <li><a href="single.html">
-                    <img src="images/pic10.jpg" class="img-responsive" alt=""/>
-                    <div class="tab_desc">
-                       <p>There are many variations</p>
-                       <h4>#25478921</h4>
-                    </div>
-                  </a></li>
-                  <li class="last"><a href="single.html">
-                    <img src="images/pic11.jpg" class="img-responsive" alt=""/>
-                    <div class="tab_desc">
-                       <p>There are many variations</p>
-                       <h4>#25478921</h4>
-                    </div>
-                  </a></li>
-                  <li><a href="single.html">
-                    <img src="images/pic12.jpg" class="img-responsive" alt=""/>
-                    <div class="tab_desc">
-                       <p>There are many variations</p>
-                       <h4>#25478921</h4>
-                    </div>
-                  </a></li>
-                  <li><a href="single.html">
-                    <img src="images/pic13.jpg" class="img-responsive" alt=""/>
-                    <div class="tab_desc">
-                       <p>There are many variations</p>
-                       <h4>#25478921</h4>
-                    </div>
-                  </a></li>
-                  <li><a href="single.html">
-                    <img src="images/pic14.jpg" class="img-responsive" alt=""/>
-                    <div class="tab_desc">
-                       <p>There are many variations</p>
-                       <h4>#25478921</h4>
-                    </div>
-                  </a></li>
-                  <li><a href="single.html">
-                    <img src="images/pic15.jpg" class="img-responsive" alt=""/>
-                    <div class="tab_desc">
-                       <p>There are many variations</p>
-                       <h4>#25478921</h4>
-                    </div>
-                  </a></li>
-                  <li><a href="single.html">
-                    <img src="images/pic16.jpg" class="img-responsive" alt=""/>
-                    <div class="tab_desc">
-                       <p>There are many variations</p>
-                       <h4>#25478921</h4>
-                    </div>
-                  </a></li>
-                  <li class="last"><a href="single.html">
-                    <img src="images/pic17.jpg" class="img-responsive" alt=""/>
-                    <div class="tab_desc">
-                       <p>There are many variations</p>
-                       <h4>#25478921</h4>
-                    </div>
-                  </a></li>
-                  <li><a href="single.html">
-                    <img src="images/pic18.jpg" class="img-responsive" alt=""/>
-                    <div class="tab_desc">
-                       <p>There are many variations</p>
-                       <h4>#25478921</h4>
-                    </div>
-                  </a></li>
-                  <li><a href="single.html">
-                    <img src="images/pic19.jpg" class="img-responsive" alt=""/>
-                    <div class="tab_desc">
-                       <p>There are many variations</p>
-                       <h4>#25478921</h4>
-                    </div>
-                  </a></li>
-                  <li><a href="single.html">
-                    <img src="images/pic41.jpg" class="img-responsive" alt=""/>
-                    <div class="tab_desc">
-                       <p>There are many variations</p>
-                       <h4>#25478921</h4>
-                    </div>
-                  </a></li>
-                  <li><a href="single.html">
-                    <img src="images/pic21.jpg" class="img-responsive" alt=""/>
-                    <div class="tab_desc">
-                       <p>There are many variations</p>
-                       <h4>#25478921</h4>
-                    </div>
-                  </a></li>
-                  <li><a href="single.html">
-                    <img src="images/pic22.jpg" class="img-responsive" alt=""/>
-                    <div class="tab_desc">
-                       <p>There are many variations</p>
-                       <h4>#25478921</h4>
-                    </div>
-                  </a></li>
-                  <li class="last"><a href="single.html">
-                    <img src="images/pic23.jpg" class="img-responsive" alt=""/>
-                    <div class="tab_desc">
-                       <p>There are many variations</p>
-                       <h4>#25478921</h4>
-                    </div>
-                  </a></li>
-                  <li><a href="single.html">
-                    <img src="images/pic24.jpg" class="img-responsive" alt=""/>
-                    <div class="tab_desc">
-                       <p>There are many variations</p>
-                       <h4>#25478921</h4>
-                    </div>
-                  </a></li>
-                  <li><a href="single.html">
-                    <img src="images/pic25.jpg" class="img-responsive" alt=""/>
-                    <div class="tab_desc">
-                       <p>There are many variations</p>
-                       <h4>#25478921</h4>
-                    </div>
-                  </a></li>
-                  <li><a href="single.html">
-                    <img src="images/pic26.jpg" class="img-responsive" alt=""/>
-                    <div class="tab_desc">
-                       <p>There are many variations</p>
-                       <h4>#25478921</h4>
-                    </div>
-                  </a></li>
-                  <li><a href="single.html">
-                    <img src="images/pic27.jpg" class="img-responsive" alt=""/>
-                    <div class="tab_desc">
-                       <p>There are many variations</p>
-                       <h4>#25478921</h4>
-                    </div>
-                  </a></li>
-                  <li><a href="single.html">
-                    <img src="images/pic28.jpg" class="img-responsive" alt=""/>
-                    <div class="tab_desc">
-                       <p>There are many variations</p>
-                       <h4>#25478921</h4>
-                    </div>
-                  </a></li>
-                  <li class="last"><a href="single.html">
-                    <img src="images/pic29.jpg" class="img-responsive" alt=""/>
-                    <div class="tab_desc">
-                       <p>There are many variations</p>
-                       <h4>#25478921</h4>
-                    </div>
-                  </a></li>
-                  <div class="clearfix"></div>
-               </ul>
-            </div>	-->
-            <!--
-            <div class="tab-1 resp-tab-content" aria-labelledby="tab_item-3">
-               <ul class="tab_img">
-                 <li><a href="single.html">
-                    <img src="images/pic1.jpg" class="img-responsive" alt=""/>
-                    <div class="tab_desc">
-                       <p>There are many variations</p>
-                       <h4>#25478921</h4>
-                    </div>
-                  </a></li>
-                   <li><a href="single.html">
-                    <img src="images/pic2.jpg" class="img-responsive" alt=""/>
-                    <div class="tab_desc">
-                       <p>There are many variations</p>
-                       <h4>#25478921</h4>
-                    </div>
-                  </a></li>
-                   <li><a href="single.html">
-                    <img src="images/pic42.jpg" class="img-responsive" alt=""/>
-                    <div class="tab_desc">
-                       <p>There are many variations</p>
-                       <h4>#25478921</h4>
-                    </div>
-                  </a></li>
-                   <li><a href="single.html">
-                    <img src="images/pic4.jpg" class="img-responsive" alt=""/>
-                    <div class="tab_desc">
-                       <p>There are many variations</p>
-                       <h4>#25478921</h4>
-                    </div>
-                  </a></li>
-                  <li><a href="single.html">
-                    <img src="images/pic5.jpg" class="img-responsive" alt=""/>
-                    <div class="tab_desc">
-                       <p>There are many variations</p>
-                       <h4>#25478921</h4>
-                    </div>
-                  </a></li>
-                  <li class="last"><a href="single.html">
-                    <img src="images/pic6.jpg" class="img-responsive" alt=""/>
-                    <div class="tab_desc">
-                       <p>There are many variations</p>
-                       <h4>#25478921</h4>
-                    </div>
-                  </a></li>
-                  <li><a href="single.html">
-                    <img src="images/pic6.jpg" class="img-responsive" alt=""/>
-                    <div class="tab_desc">
-                       <p>There are many variations</p>
-                       <h4>#25478921</h4>
-                    </div>
-                  </a></li>
-                  <li><a href="single.html">
-                    <img src="images/pic7.jpg" class="img-responsive" alt=""/>
-                    <div class="tab_desc">
-                       <p>There are many variations</p>
-                       <h4>#25478921</h4>
-                    </div>
-                  </a></li>
-                  <li><a href="single.html">
-                    <img src="images/pic8.jpg" class="img-responsive" alt=""/>
-                    <div class="tab_desc">
-                       <p>There are many variations</p>
-                       <h4>#25478921</h4>
-                    </div>
-                  </a></li>
-                  <li><a href="single.html">
-                    <img src="images/pic9.jpg" class="img-responsive" alt=""/>
-                    <div class="tab_desc">
-                       <p>There are many variations</p>
-                       <h4>#25478921</h4>
-                    </div>
-                  </a></li>
-                  <li><a href="single.html">
-                    <img src="images/pic10.jpg" class="img-responsive" alt=""/>
-                    <div class="tab_desc">
-                       <p>There are many variations</p>
-                       <h4>#25478921</h4>
-                    </div>
-                  </a></li>
-                  <li class="last"><a href="single.html">
-                    <img src="images/pic43.jpg" class="img-responsive" alt=""/>
-                    <div class="tab_desc">
-                       <p>There are many variations</p>
-                       <h4>#25478921</h4>
-                    </div>
-                  </a></li>
-                  <li><a href="single.html">
-                    <img src="images/pic12.jpg" class="img-responsive" alt=""/>
-                    <div class="tab_desc">
-                       <p>There are many variations</p>
-                       <h4>#25478921</h4>
-                    </div>
-                  </a></li>
-                  <li><a href="single.html">
-                    <img src="images/pic13.jpg" class="img-responsive" alt=""/>
-                    <div class="tab_desc">
-                       <p>There are many variations</p>
-                       <h4>#25478921</h4>
-                    </div>
-                 </a> </li>
-                  <li><a href="single.html">
-                    <img src="images/pic14.jpg" class="img-responsive" alt=""/>
-                    <div class="tab_desc">
-                       <p>There are many variations</p>
-                       <h4>#25478921</h4>
-                    </div>
-                  </a></li>
-                  <li><a href="single.html">
-                    <img src="images/pic15.jpg" class="img-responsive" alt=""/>
-                    <div class="tab_desc">
-                       <p>There are many variations</p>
-                       <h4>#25478921</h4>
-                    </div>
-                  </a></li>
-                  <li><a href="single.html">
-                    <img src="images/pic16.jpg" class="img-responsive" alt=""/>
-                    <div class="tab_desc">
-                       <p>There are many variations</p>
-                       <h4>#25478921</h4>
-                    </div>
-                  </a></li>
-                  <li class="last"><a href="single.html">
-                    <img src="images/pic17.jpg" class="img-responsive" alt=""/>
-                    <div class="tab_desc">
-                       <p>There are many variations</p>
-                       <h4>#25478921</h4>
-                    </div>
-                  </a></li>
-                  <li><a href="single.html">
-                    <img src="images/pic18.jpg" class="img-responsive" alt=""/>
-                    <div class="tab_desc">
-                       <p>There are many variations</p>
-                       <h4>#25478921</h4>
-                    </div>
-                  </a></li>
-                  <li><a href="single.html">
-                    <img src="images/pic19.jpg" class="img-responsive" alt=""/>
-                    <div class="tab_desc">
-                       <p>There are many variations</p>
-                       <h4>#25478921</h4>
-                    </div>
-                  </a></li>
-                  <li><a href="single.html">
-                    <img src="images/pic20.jpg" class="img-responsive" alt=""/>
-                    <div class="tab_desc">
-                       <p>There are many variations</p>
-                       <h4>#25478921</h4>
-                    </div>
-                  </a></li>
-                  <li><a href="single.html">
-                    <img src="images/pic21.jpg" class="img-responsive" alt=""/>
-                    <div class="tab_desc">
-                       <p>There are many variations</p>
-                       <h4>#25478921</h4>
-                    </div>
-                  </a></li>
-                  <li><a href="single.html">
-                    <img src="images/pic22.jpg" class="img-responsive" alt=""/>
-                    <div class="tab_desc">
-                       <p>There are many variations</p>
-                       <h4>#25478921</h4>
-                    </div>
-                  </a></li>
-                  <li class="last"><a href="single.html">
-                    <img src="images/pic23.jpg" class="img-responsive" alt=""/>
-                    <div class="tab_desc">
-                       <p>There are many variations</p>
-                       <h4>#25478921</h4>
-                    </div>
-                  </a></li>
-                  <li><a href="single.html">
-                    <img src="images/pic24.jpg" class="img-responsive" alt=""/>
-                    <div class="tab_desc">
-                       <p>There are many variations</p>
-                       <h4>#25478921</h4>
-                    </div>
-                  </a></li>
-                  <li><a href="single.html">
-                    <img src="images/pic25.jpg" class="img-responsive" alt=""/>
-                    <div class="tab_desc">
-                       <p>There are many variations</p>
-                       <h4>#25478921</h4>
-                    </div>
-                  </a></li>
-                  <li><a href="single.html">
-                    <img src="images/pic26.jpg" class="img-responsive" alt=""/>
-                    <div class="tab_desc">
-                       <p>There are many variations</p>
-                       <h4>#25478921</h4>
-                    </div>
-                  </a></li>
-                  <li><a href="single.html">
-                    <img src="images/pic27.jpg" class="img-responsive" alt=""/>
-                    <div class="tab_desc">
-                       <p>There are many variations</p>
-                       <h4>#25478921</h4>
-                    </div>
-                  </a></li>
-                  <li><a href="single.html">
-                    <img src="images/pic28.jpg" class="img-responsive" alt=""/>
-                    <div class="tab_desc">
-                       <p>There are many variations</p>
-                       <h4>#25478921</h4>
-                    </div>
-                  </a></li>
-                  <li class="last"><a href="single.html">
-                    <img src="images/pic29.jpg" class="img-responsive" alt=""/>
-                    <div class="tab_desc">
-                       <p>There are many variations</p>
-                       <h4>#25478921</h4>
-                    </div>
-                  </a></li>
-                  <div class="clearfix"></div>
-               </ul>
-          </div>
-           -->
         </div>
     </div>
     <ul class="pagination">
-        <li>
-            <a href="#" aria-label="Previous">
-                <span aria-hidden="true">«</span>
-            </a>
-        </li>
-        <li><a href="#">1</a></li>
-        <li><a href="#">2</a></li>
-        <li><a href="#">3</a></li>
-        <li><a href="#">4</a></li>
-        <li><a href="#">5</a></li>
-        <li>
-            <a href="#" aria-label="Next">
-                <span aria-hidden="true">»</span>
-            </a>
-        </li>
+        <%--<li>--%>
+        <%--<a href="#" aria-label="Previous">--%>
+        <%--<span aria-hidden="true" onclick="showPage(currentPage-1)">«</span>--%>
+        <%--</a>--%>
+        <%--</li>--%>
+        <%--<li id="page_0"><a href="#horizontalTab" onclick="showPage(0)">1</a></li>--%>
+        <%--<li id="page_1"><a href="#horizontalTab" onclick="showPage(1)">2</a></li>--%>
+        <%--<li id="page_2"><a href="#horizontalTab" onclick="showPage(2)">3</a></li>--%>
+        <%--<li class="disabled"><a>……</a></li>--%>
+        <%--<li id="page_3"><a href="#horizontalTab" onclick="showPage(3)">4</a></li>--%>
+        <%--<li id="page_4"><a href="#horizontalTab" onclick="showPage(4)">5</a></li>--%>
+        <%--<li id="page_5"><a href="#horizontalTab" onclick="showPage(4)">5</a></li>--%>
+        <%--<li>--%>
+        <%--<a href="#horizontalTab" aria-label="Next" onclick="showPage(currentPage+1)">--%>
+        <%--<span aria-hidden="true">»</span>--%>
+        <%--</a>--%>
+        <%--</li>--%>
     </ul>
 </div>
 <div class="clearfix"></div>
@@ -865,5 +229,103 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
         </p>
     </div>
 </div>
+<script>
+    var query = "${query}";
+    var size = 9;
+    var currentPage = 0;
+    var url = '/result?';
+    $(function () {
+//        var page = $(".pagination").val();
+        listfunction(currentPage);
+    });
+
+    //分页
+    function listfunction(page, array) {
+        $(".pagination").val(page);
+        $.post(url + '&query=' + query + '&size=' + size + '&page=' + page, array, function (jsonObj) {
+            var html = '';
+            var jsonData = jsonObj.result;
+            var hits = jsonObj.size;
+            for (var key in jsonData) {
+                html += '<li><a href="';
+                html += jsonData[key].url + '">';
+                html += '<div class="tab_desc">';
+                html += '<h3 style="overflow: hidden;white-space: nowrap;text-overflow: ellipsis;">' + jsonData[key].name + '</h3>';
+                html += '<h4>人数：XX</h4>';
+                html += '<h4>工资：' + jsonData[key].salary + '</h4>';
+                html += '<h4>' + jsonData[key].officalName + '</h4>';
+                html += '</div></a></li>';
+            }
+            $(".tab_img").html(html);
+            $("#page_" + currentPage).removeClass("active");
+            currentPage = page;
+            pager(page, Math.ceil(hits / size));
+            $("#page_" + page).addClass("active");
+//            if(parseInt(jsonObj.total) > rows)
+//                $("#pager").css("display","block");
+//            else
+//                $("#pager").css("display","none");
+//
+//            var totalPage = jsonObj.total % rows == 0 ? jsonObj.total / rows : jsonObj.total / rows + 1 ;
+//            //分页
+//            laypage({
+//                cont: 'pager', //容器。值支持id名
+//                pages: totalPage, //通过后台拿到的总页数
+//                groups: 7, //连续显示分页数
+//                curr: page, //当前页
+//                jump: function(obj, first){ //触发分页后的回调
+//                    if(!first){ //点击跳页触发函数自身，并传递当前页：obj.curr
+//                        listfunction(url,obj.curr);
+//                    }
+//                }
+//            });
+        });
+    }
+
+    //    function showPage(newpage){
+    //
+    //        alert("show :"+newPage);
+    //        listfunction(newpage);
+    //    }
+
+    function pager(active, all) {
+//        var html='';
+//        html+='<li><a href="#" aria-label="Previous"><span aria-hidden="true" onclick="showPage(currentPage-1)">«</span></a></li>';
+//
+//        if(all<6){
+//            for(var i=0;i<all;i++){
+//                html+='<li id="page_'+i+'"><a href="#horizontalTab" onclick="showPage('+i+')">'+(i+1)+'</a></li>'
+//            }
+//        }else{
+//            html+='<li id="page_'+(active-2)+'"><a href="#horizontalTab" onclick="showPage('+(active-2)+')">'+(active-1)+'</a></li>';
+//            html+='<li id="page_'+(active-1)+'"><a href="#horizontalTab" onclick="showPage('+(active-1)+')">'+active+'</a></li>';
+//        }
+//        html+='<li><a href="#" aria-label="Next"><span aria-hidden="true" onclick="showPage(currentPage+1)">»</span></a></li>';
+//        $(".pagination").html(html);
+        if (active > 5) {
+            var html = '<li><a href="#horizontalTab" aria-label="Previous" onclick="listfunction(currentPage-1)"><span aria-hidden="true">«</span></a></li>';
+            for (var i = active - 2; i <= active + 3 && i <= all; i++) {
+                html += '<li id="page_' + i + '"><a href="#horizontalTab" onclick="listfunction(' + i + ')">' + (i + 1) + '</a></li>'
+            }
+            html += '<li><a href="#horizontalTab" aria-label="Next"  onclick="listfunction(currentPage+1)"><span aria-hidden="true">»</span></a></li>';
+            $(".pagination").html(html);
+        } else {
+            var html = '<li><a href="#horizontalTab" aria-label="Previous"  onclick="listfunction(currentPage-1)"><span aria-hidden="true">«</span></a></li>';
+            for (var i = 0; i <= 5 && i <= all; i++) {
+                html += '<li id="page_' + i + '"><a href="#horizontalTab" onclick="listfunction(' + i + ')">' + (i + 1) + '</a></li>'
+            }
+            html += '<li><a href="#horizontalTab" aria-label="Next" onclick="listfunction(currentPage+1)"><span aria-hidden="true">»</span></a></li>';
+            $(".pagination").html(html);
+        }
+    }
+
+    function listfilter(filter) {
+        var array = [];
+        array.push({name: 'education', value: filter})
+        //alert(jQuery('input[type="radio"][name="education"]:checked'));
+        listfunction(currentPage, array);
+    }
+
+</script>
 </body>
 </html>		
