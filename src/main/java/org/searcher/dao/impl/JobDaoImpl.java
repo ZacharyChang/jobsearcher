@@ -1,8 +1,5 @@
 package org.searcher.dao.impl;
 
-import com.alibaba.fastjson.JSONObject;
-import org.apache.lucene.queryparser.xml.FilterBuilder;
-import org.apache.lucene.queryparser.xml.builders.TermQueryBuilder;
 import org.elasticsearch.action.search.SearchRequestBuilder;
 import org.elasticsearch.action.search.SearchResponse;
 import org.elasticsearch.action.search.SearchType;
@@ -10,14 +7,13 @@ import org.elasticsearch.client.Client;
 import org.elasticsearch.client.transport.TransportClient;
 import org.elasticsearch.common.transport.InetSocketTransportAddress;
 import org.elasticsearch.index.query.BoolQueryBuilder;
-import org.elasticsearch.index.query.PrefixQueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
+import org.elasticsearch.search.aggregations.AggregationBuilders;
 import org.searcher.dao.JobDao;
 import org.springframework.stereotype.Repository;
 
 import java.net.InetAddress;
 import java.net.UnknownHostException;
-import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -32,7 +28,7 @@ public class JobDaoImpl implements JobDao {
         try {
             Client client = TransportClient.builder().build()
                     .addTransportAddress(new InetSocketTransportAddress(InetAddress.getByName(hostName), port));
-            SearchResponse response = client.prepareSearch("searcher")
+            SearchResponse response = client.prepareSearch("newsearch")
                     .setTypes("job")
                     .setSearchType(SearchType.DFS_QUERY_THEN_FETCH)
                     .setQuery(QueryBuilders.queryStringQuery(queryString))                 // Query
@@ -51,7 +47,7 @@ public class JobDaoImpl implements JobDao {
         try {
             Client client = TransportClient.builder().build()
                     .addTransportAddress(new InetSocketTransportAddress(InetAddress.getByName(hostName), port));
-            SearchResponse response = client.prepareSearch("searcher")
+            SearchResponse response = client.prepareSearch("newsearch")
                     .setTypes("job")
                     .setSearchType(SearchType.DFS_QUERY_THEN_FETCH)
                     .setQuery(QueryBuilders.queryStringQuery(queryString))                 // Query
@@ -72,7 +68,7 @@ public class JobDaoImpl implements JobDao {
         try {
             Client client = TransportClient.builder().build()
                     .addTransportAddress(new InetSocketTransportAddress(InetAddress.getByName(hostName), port));
-            SearchRequestBuilder searchRequestBuilder = client.prepareSearch("searcher")
+            SearchRequestBuilder searchRequestBuilder = client.prepareSearch("newsearch")
                     .setTypes("job")
                     .setSearchType(SearchType.DFS_QUERY_THEN_FETCH)
                     .setQuery(QueryBuilders.queryStringQuery(queryString))                 // Query
@@ -87,6 +83,22 @@ public class JobDaoImpl implements JobDao {
             SearchResponse response = searchRequestBuilder.execute().actionGet();
             client.close();
             return response;
+        } catch (UnknownHostException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public SearchResponse getDistrictsByCity(String city) {
+        try {
+            Client client = TransportClient.builder().build()
+                    .addTransportAddress(new InetSocketTransportAddress(InetAddress.getByName(hostName), port));
+            SearchResponse sr = client.prepareSearch().setTypes(city)
+                    .addAggregation(
+                            AggregationBuilders.terms("all_district").field("district")
+                    )
+                    .execute().actionGet();
+            return sr;
         } catch (UnknownHostException e) {
             e.printStackTrace();
         }

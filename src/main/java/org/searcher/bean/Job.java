@@ -5,10 +5,17 @@ package org.searcher.bean;
  */
 public class Job {
     private String name;
-    private String source;
+    private String source;      //来源
+    private String sourceLink;
     private String salary;
-    private String officalName;
+    private String officialName;
     private String url;
+    private String experience;
+    private String district;
+    private String size; //人数
+    private String startDate;
+    private String description;
+
 
     public String getName() {
         return name;
@@ -34,12 +41,52 @@ public class Job {
         this.salary = salary;
     }
 
-    public String getOfficalName() {
-        return officalName;
+    public String getOfficialName() {
+        return officialName;
     }
 
-    public void setOfficalName(String officalName) {
-        this.officalName = officalName;
+    public void setOfficialName(String officialName) {
+        this.officialName = officialName;
+    }
+
+    public String getExperience() {
+        return experience;
+    }
+
+    public void setExperience(String experience) {
+        this.experience = experience;
+    }
+
+    public String getDistrict() {
+        return district;
+    }
+
+    public void setDistrict(String district) {
+        this.district = district;
+    }
+
+    public String getSize() {
+        return size;
+    }
+
+    public void setSize(String size) {
+        this.size = size;
+    }
+
+    public String getStartDate() {
+        return startDate;
+    }
+
+    public void setStartDate(String startDate) {
+        this.startDate = startDate;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     public String getUrl() {
@@ -48,5 +95,13 @@ public class Job {
 
     public void setUrl(String url) {
         this.url = url;
+    }
+
+    public String getSourceLink() {
+        return sourceLink;
+    }
+
+    public void setSourceLink(String sourceLink) {
+        this.sourceLink = sourceLink;
     }
 }

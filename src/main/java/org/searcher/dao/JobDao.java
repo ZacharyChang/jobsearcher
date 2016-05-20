@@ -15,4 +15,6 @@ public interface JobDao {
     public SearchResponse filterByEducation(String queryString, String education, int size, int page);
 
     public SearchResponse queryWithFilter(String queryString, Map<String, String> filter, int size, int page);
+
+    public SearchResponse getDistrictsByCity(String city);
 }
