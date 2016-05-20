@@ -1,17 +1,24 @@
 package org.searcher.dao.impl;
 
+import com.alibaba.fastjson.JSONObject;
 import org.apache.lucene.queryparser.xml.FilterBuilder;
+import org.apache.lucene.queryparser.xml.builders.TermQueryBuilder;
+import org.elasticsearch.action.search.SearchRequestBuilder;
 import org.elasticsearch.action.search.SearchResponse;
 import org.elasticsearch.action.search.SearchType;
 import org.elasticsearch.client.Client;
 import org.elasticsearch.client.transport.TransportClient;
 import org.elasticsearch.common.transport.InetSocketTransportAddress;
+import org.elasticsearch.index.query.BoolQueryBuilder;
+import org.elasticsearch.index.query.PrefixQueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
 import org.searcher.dao.JobDao;
 import org.springframework.stereotype.Repository;
 
 import java.net.InetAddress;
 import java.net.UnknownHostException;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Created by ZacharyChang.
@@ -25,12 +32,11 @@ public class JobDaoImpl implements JobDao {
         try {
             Client client = TransportClient.builder().build()
                     .addTransportAddress(new InetSocketTransportAddress(InetAddress.getByName(hostName), port));
-            SearchResponse response = client.prepareSearch("test")
-                    .setTypes("search")
+            SearchResponse response = client.prepareSearch("searcher")
+                    .setTypes("job")
                     .setSearchType(SearchType.DFS_QUERY_THEN_FETCH)
                     .setQuery(QueryBuilders.queryStringQuery(queryString))                 // Query
-//                .setPostFilter(QueryBuilders.rangeQuery("age").from(12).to(18))     // Filter
-                    .setFrom(page * size).setSize(size).setExplain(true)
+                    .setFrom(page * size).setSize(size).setExplain(false)
                     .execute()
                     .actionGet();
             client.close();
@@ -45,8 +51,8 @@ public class JobDaoImpl implements JobDao {
         try {
             Client client = TransportClient.builder().build()
                     .addTransportAddress(new InetSocketTransportAddress(InetAddress.getByName(hostName), port));
-            SearchResponse response = client.prepareSearch("test")
-                    .setTypes("search")
+            SearchResponse response = client.prepareSearch("searcher")
+                    .setTypes("job")
                     .setSearchType(SearchType.DFS_QUERY_THEN_FETCH)
                     .setQuery(QueryBuilders.queryStringQuery(queryString))                 // Query
                     .setPostFilter(QueryBuilders.prefixQuery("education", education))     // Filter
@@ -61,4 +67,29 @@ public class JobDaoImpl implements JobDao {
         return null;
     }
 
+    public SearchResponse queryWithFilter(String queryString, Map<String, String> filter, int size, int page) {
+        System.out.println(filter);
+        try {
+            Client client = TransportClient.builder().build()
+                    .addTransportAddress(new InetSocketTransportAddress(InetAddress.getByName(hostName), port));
+            SearchRequestBuilder searchRequestBuilder = client.prepareSearch("searcher")
+                    .setTypes("job")
+                    .setSearchType(SearchType.DFS_QUERY_THEN_FETCH)
+                    .setQuery(QueryBuilders.queryStringQuery(queryString))                 // Query
+                    .setFrom(page * size).setSize(size).setExplain(false);
+            if (filter.size() > 0) {
+                BoolQueryBuilder boolQueryBuilder = QueryBuilders.boolQuery();
+                for (Map.Entry entry : filter.entrySet()) {
+                    boolQueryBuilder.must(QueryBuilders.termQuery((String) entry.getKey(), entry.getValue()));
+                }
+                searchRequestBuilder.setPostFilter(boolQueryBuilder);
+            }
+            SearchResponse response = searchRequestBuilder.execute().actionGet();
+            client.close();
+            return response;
+        } catch (UnknownHostException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
 }

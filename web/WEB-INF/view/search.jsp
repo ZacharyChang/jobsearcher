@@ -94,29 +94,34 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
                 </div>
                 <div class="col col-4" >
                     <label class="checkbox"><input type="radio" name="education"
-                                                   onclick="listfilter('初中')"><i></i>初中</label>
+                                                   onclick="listfilter('education','初中')"><i></i>初中</label>
                     <label class="checkbox"><input type="radio" name="education" onclick="listfilter('中专')"><i></i>中专/中技</label>
                     <label class="checkbox"><input type="radio" name="education"
-                                                   onclick="listfilter('高中')"><i></i>高中</label>
+                                                   onclick="listfilter('education','高中')"><i></i>高中</label>
                     <label class="checkbox"><input type="radio" name="education"
-                                                   onclick="listfilter('大专')"><i></i>大专</label>
+                                                   onclick="listfilter('education','大专')"><i></i>大专</label>
                     <label class="checkbox"><input type="radio" name="education"
-                                                   onclick="listfilter('本科')"><i></i>本科</label>
+                                                   onclick="listfilter('education','本科')"><i></i>本科</label>
                     <label class="checkbox"><input type="radio" name="education"
-                                                   onclick="listfilter('硕士')"><i></i>硕士</label>
+                                                   onclick="listfilter('education','硕士')"><i></i>硕士</label>
                     <label class="checkbox"><input type="radio" name="education"
-                                                   onclick="listfilter('博士')"><i></i>博士</label>
+                                                   onclick="listfilter('education','博士')"><i></i>博士</label>
                 </div>
             </section>
             <section class="sky-form">
                 <h4>经验</h4>
                 <div class="col col-4">
-                    <label class="checkbox"><input type="checkbox" name="checkbox" checked=""><i></i>不限</label>
-                    <label class="checkbox"><input type="checkbox" name="checkbox"><i></i>1年以下</label>
-                    <label class="checkbox"><input type="checkbox" name="checkbox"><i></i>1-3年</label>
-                    <label class="checkbox"><input type="checkbox" name="checkbox"><i></i>3-5年</label>
-                    <label class="checkbox"><input type="checkbox" name="checkbox"><i></i>5-10年</label>
-                    <label class="checkbox"><input type="checkbox" name="checkbox"><i></i>10年以上</label>
+                    <label class="checkbox"><input type="radio" name="checkbox" checked=""><i></i>不限</label>
+                    <label class="checkbox"><input type="radio" name="checkbox"
+                                                   onclick="listfilter('experience','1年以下')"><i></i>1年以下</label>
+                    <label class="checkbox"><input type="radio" name="checkbox"
+                                                   onclick="listfilter('experience','1-3年')"><i></i>1-3年</label>
+                    <label class="checkbox"><input type="radio" name="checkbox"
+                                                   onclick="listfilter('experience','3-5年')"><i></i>3-5年</label>
+                    <label class="checkbox"><input type="radio" name="checkbox"
+                                                   onclick="listfilter('experience','5-10年')"><i></i>5-10年</label>
+                    <label class="checkbox"><input type="radio" name="checkbox"
+                                                   onclick="listfilter('experience','10年以上')"><i></i>10年以上</label>
                 </div>
             </section>
             <!--<section class="sky-form">-->
@@ -234,21 +239,22 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
     var size = 9;
     var currentPage = 0;
     var url = '/result?';
+    var filter = {};
     $(function () {
 //        var page = $(".pagination").val();
         listfunction(currentPage);
     });
 
     //分页
-    function listfunction(page, array) {
-        $(".pagination").val(page);
-        $.post(url + '&query=' + query + '&size=' + size + '&page=' + page, array, function (jsonObj) {
+    function listfunction(page) {
+//        $(".pagination").val(page);
+        $.post(url + '&query=' + query + '&size=' + size + '&page=' + page, {data: JSON.stringify(filter)}, function (jsonObj) {
             var html = '';
             var jsonData = jsonObj.result;
             var hits = jsonObj.size;
             for (var key in jsonData) {
                 html += '<li><a href="';
-                html += jsonData[key].url + '">';
+                html += jsonData[key].url + '" target="_blank">';
                 html += '<div class="tab_desc">';
                 html += '<h3 style="overflow: hidden;white-space: nowrap;text-overflow: ellipsis;">' + jsonData[key].name + '</h3>';
                 html += '<h4>人数：XX</h4>';
@@ -259,7 +265,7 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
             $(".tab_img").html(html);
             $("#page_" + currentPage).removeClass("active");
             currentPage = page;
-            pager(page, Math.ceil(hits / size));
+            pager(page, Math.ceil(hits / size) - 1);
             $("#page_" + page).addClass("active");
 //            if(parseInt(jsonObj.total) > rows)
 //                $("#pager").css("display","block");
@@ -319,11 +325,10 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
         }
     }
 
-    function listfilter(filter) {
-        var array = [];
-        array.push({name: 'education', value: filter})
+    function listfilter(key, value) {
+        filter[key] = value;
         //alert(jQuery('input[type="radio"][name="education"]:checked'));
-        listfunction(currentPage, array);
+        listfunction(0);
     }
 
 </script>

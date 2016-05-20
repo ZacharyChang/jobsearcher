@@ -1,11 +1,11 @@
 package org.searcher.controller;
 
-import org.elasticsearch.action.search.SearchResponse;
-import org.searcher.bean.Job;
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
+import org.apache.log4j.Logger;
 import org.searcher.service.JobService;
-import org.searcher.util.SearchUtil;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -13,10 +13,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -24,6 +21,7 @@ import java.util.Map;
  */
 @Controller
 public class MainController {
+    private Logger logger = Logger.getLogger("controller-main");
     @Autowired
     private JobService jobService;
     @RequestMapping(value = "/", method = RequestMethod.GET)
@@ -43,15 +41,20 @@ public class MainController {
 
     @RequestMapping(value = "/result", method = {RequestMethod.POST, RequestMethod.GET})
     @ResponseBody
-    public Map<String, Object> result(@RequestParam("query") String queryString, @RequestParam("size") int size, @RequestParam("page") int page, @RequestParam(value = "education", required = false) String education) {
+    public Map<String, Object> result(@RequestParam("query") String queryString, @RequestParam("size") int size, @RequestParam("page") int page, @RequestParam(value = "data", required = false) String filter) {
         Map<String, Object> resultMap = new HashMap<>();
-        if (education != null && education != "") {
-            resultMap.put("result", jobService.searchFilterEducation(queryString, education, size, page));
-            resultMap.put("size", jobService.getFilterEducationSize(queryString, education));
+        logger.info("get request.");
+        logger.info(filter.toString());
+        if (filter != null && !filter.equals("{}")) {
+            logger.info(filter.toString());
+            Map<String, String> map = (Map<String, String>) JSONObject.parse(filter);
+            resultMap.put("result", jobService.searchWithFilter(queryString, map, size, page));
+            resultMap.put("size", jobService.getFilterSize(queryString, map));
         } else {
             resultMap.put("result", jobService.searchJob(queryString, size, page));
             resultMap.put("size", jobService.getSearchSize(queryString));
         }
         return resultMap;
     }
+
 }
