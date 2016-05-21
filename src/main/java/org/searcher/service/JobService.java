@@ -11,17 +11,17 @@ import java.util.Map;
  */
 @Service
 public interface JobService {
-    public List<Job> searchJob(String str, int size, int page);
+    List<Job> searchJob(String city, String str, int size, int page);
 
-    public long getSearchSize(String str);
+    long getSearchSize(String city, String str);
 
-    public List<Job> searchWithFilter(String str, Map<String, String> filter, int size, int page);
+    List<Job> searchWithFilter(String city, String str, Map<String, String> filter, int size, int page);
 
-    public long getFilterSize(String str, Map<String, String> filter);
+    long getFilterSize(String city, String str, Map<String, String> filter);
 
 //    public List<Job> searchFilterEducation(String str, String education, int size, int page);
 //
 //    public long getFilterEducationSize(String str, String education);
 
-    public List<String> getDistrictsByCity(String city);
+    List<String> getDistrictsByCity(String city);
 }

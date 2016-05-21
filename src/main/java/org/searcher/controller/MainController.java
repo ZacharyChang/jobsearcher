@@ -1,7 +1,5 @@
 package org.searcher.controller;
 
-import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import org.apache.log4j.Logger;
 import org.searcher.service.JobService;
@@ -53,22 +51,22 @@ public class MainController {
 
     @RequestMapping(value = "/result", method = {RequestMethod.POST, RequestMethod.GET})
     @ResponseBody
-    public Map<String, Object> result(@RequestParam("query") String queryString, @RequestParam(value = "city", required = false) String city, @RequestParam("size") int size, @RequestParam("page") int page, @RequestParam(value = "data", required = false) String filter) {
+    public Map<String, Object> result(@RequestParam("query") String queryString, @RequestParam(value = "city") String city, @RequestParam("size") int size, @RequestParam("page") int page, @RequestParam(value = "data", required = false) String filter) {
         Map<String, Object> resultMap = new HashMap<>();
         logger.info("get request.");
         logger.info(filter.toString());
         System.out.println(city);
-        if (null != filter && !"{}" .equals(filter)) {
+//        if (null != filter && !"{}" .equals(filter)) {
             logger.info(filter.toString());
             Map<String, String> map = (Map<String, String>) JSONObject.parse(filter);
 
             System.out.println(city);
-            resultMap.put("result", jobService.searchWithFilter(queryString, map, size, page));
-            resultMap.put("size", jobService.getFilterSize(queryString, map));
-        } else {
-            resultMap.put("result", jobService.searchJob(queryString, size, page));
-            resultMap.put("size", jobService.getSearchSize(queryString));
-        }
+        resultMap.put("result", jobService.searchWithFilter(city, queryString, map, size, page));
+        resultMap.put("size", jobService.getFilterSize(city, queryString, map));
+//        } else {
+//            resultMap.put("result", jobService.searchJob(city,queryString, size, page));
+//            resultMap.put("size", jobService.getSearchSize(city,queryString));
+//        }
         return resultMap;
     }
 

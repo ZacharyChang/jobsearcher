@@ -10,11 +10,11 @@ import java.util.Map;
  */
 @Repository
 public interface JobDao {
-    public SearchResponse queryByString(String queryString, int size, int page);
+    SearchResponse queryByString(String city, String queryString, int size, int page);
 
-    public SearchResponse filterByEducation(String queryString, String education, int size, int page);
+//    public SearchResponse filterByEducation(String city,String queryString, String education, int size, int page);
 
-    public SearchResponse queryWithFilter(String queryString, Map<String, String> filter, int size, int page);
+    SearchResponse queryWithFilter(String city, String queryString, Map<String, String> filter, int size, int page);
 
-    public SearchResponse getDistrictsByCity(String city);
+    SearchResponse getDistrictsByCity(String city);
 }

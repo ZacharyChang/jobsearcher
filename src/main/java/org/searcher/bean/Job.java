@@ -10,6 +10,7 @@ public class Job {
     private String salary;
     private String officialName;
     private String url;
+    private String education;
     private String experience;
     private String district;
     private String size; //人数
@@ -103,5 +104,13 @@ public class Job {
 
     public void setSourceLink(String sourceLink) {
         this.sourceLink = sourceLink;
+    }
+
+    public String getEducation() {
+        return education;
+    }
+
+    public void setEducation(String education) {
+        this.education = education;
     }
 }

@@ -30,8 +30,8 @@ public class JobServiceImpl implements JobService{
     @Autowired
     private JobDao jobDao;
     @Override
-    public List<Job> searchJob(String str, int size, int page) {
-        SearchResponse response = jobDao.queryByString(str, size, page);
+    public List<Job> searchJob(String city, String str, int size, int page) {
+        SearchResponse response = jobDao.queryByString(city, str, size, page);
         Job job;
         List<Job> jobList = new ArrayList<>();
         for (SearchHit searchHitFields : response.getHits().getHits()) {
@@ -53,13 +53,13 @@ public class JobServiceImpl implements JobService{
     }
 
     @Override
-    public long getSearchSize(String str) {
-        return jobDao.queryByString(str, 0, 0).getHits().getTotalHits();
+    public long getSearchSize(String city, String str) {
+        return jobDao.queryByString(city, str, 0, 0).getHits().getTotalHits();
     }
 
     @Override
-    public List<Job> searchWithFilter(String str, Map<String, String> filter, int size, int page) {
-        SearchResponse response = jobDao.queryWithFilter(str, filter, size, page);
+    public List<Job> searchWithFilter(String city, String str, Map<String, String> filter, int size, int page) {
+        SearchResponse response = jobDao.queryWithFilter(city, str, filter, size, page);
         Job job;
         List<Job> jobList = new ArrayList<>();
         for (SearchHit searchHitFields : response.getHits().getHits()) {
@@ -72,6 +72,7 @@ public class JobServiceImpl implements JobService{
             job.setUrl((String) searchHitFields.getSource().get("url"));
             job.setDescription((String) searchHitFields.getSource().get("description_jd"));
             job.setExperience((String) searchHitFields.getSource().get("ori_experience"));
+            job.setEducation((String) searchHitFields.getSource().get("education"));
             job.setDistrict((String) searchHitFields.getSource().get("district"));
             job.setSize(searchHitFields.getSource().get("size").toString());
             job.setStartDate((String) searchHitFields.getSource().get("startdate"));
@@ -81,8 +82,8 @@ public class JobServiceImpl implements JobService{
     }
 
     @Override
-    public long getFilterSize(String str, Map<String, String> filter) {
-        return jobDao.queryWithFilter(str, filter, 0, 0).getHits().getTotalHits();
+    public long getFilterSize(String city, String str, Map<String, String> filter) {
+        return jobDao.queryWithFilter(city, str, filter, 0, 0).getHits().getTotalHits();
     }
 
 //    @Override
