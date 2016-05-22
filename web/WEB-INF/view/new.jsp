@@ -693,7 +693,20 @@
         <dd data="employertype:个人企业" onclick="filterEmployertype(this)">个人企业</dd>
         <dd data="employertype:其他" onclick="filterEmployertype(this)">其他</dd>
         </dl>
+    </div>
+    </dd>
 
+    <dd>
+        <div class="selector" id="s-size">
+            <dl>
+    <dt><span holder="公司性质">公司规模</span></dt>
+    <dd onclick="filterSize(this)">不限</dd>
+    <dd onclick="filterSize(this)">20人以下</dd>
+    <dd onclick="filterSize(this)">20-99人</dd>
+    <dd onclick="filterSize(this)">100-499人</dd>
+    <dd onclick="filterSize(this)">1000-9999人</dd>
+    <dd onclick="filterSize(this)">10000人以上</dd>
+    </dl>
     </div>
     </dd>
 
@@ -731,8 +744,10 @@
             <div class="sort-tabs" id="sort-tabs">
                 <ul>
                     <li class="active" flag="" id="default-sort"><a href="javascript:void(0)"><span>默认排序</span></a></li>
-                    <li flag="5"><a href="javascript:void(0)"><span>按发布时间排序</span></a></li>
-                    <li flag="4"><a href="javascript:void(0)"><span>按薪资排序</span></a></li>
+                    <li flag="5"><a href="javascript:void(0)" onclick="listsort('startdate')"><span>按发布时间排序</span></a>
+                    </li>
+                    <li flag="4"><a href="javascript:void(0)" onclick="listsort('enddate')"><span>按终止日期排序</span></a>
+                    </li>
                 </ul>
             </div>
             <div class="expand-tools">
@@ -800,6 +815,7 @@
     var currentPage = 0;
     var url = '/result?query=${query}&city=${city}';
     var filter = {};
+    var sort = "";
     $(function () {
 //        var page = $(".pagination").val();
         listfunction(currentPage);
@@ -834,7 +850,10 @@
     //分页
     function listfunction(page) {
 //        $(".pagination").val(page);
-        $.post(url + '&size=' + size + '&page=' + page, {data: JSON.stringify(filter)}, function (jsonObj) {
+        $.post(url + '&size=' + size + '&page=' + page, {
+            "filter": JSON.stringify(filter),
+            "sort": sort
+        }, function (jsonObj) {
             var html = '';
             var jsonData = jsonObj.result;
             var hits = jsonObj.size;
@@ -862,7 +881,7 @@
                     html += '</dd><dd class="jobs-source"><a href="' + jsonData[key].sourceLink + '" target="_blank">' + jsonData[key].source + '</a></dd><dd class="jobs-time">' + jsonData[key].startDate + '</dd><dd class="jobs-btn"><a href="javascript:void(0)" log="mod=joblist&act=beha&index=29" class="item-expand-btn">x</a></dd><dd class="jobs-discription">';
                     html += '<div class="detail"><p class="detail-item">';
                     if (jsonData[key].size != "None") {
-                        html += '<span><b>招聘人数：</b>' + jsonData[key].size + '</span>';
+                        html += '<span><b>招聘人数：</b>' + jsonData[key].number + '</span>';
                     } else {
                         html += '<span><b>招聘人数：</b>若干人</span>';
                     }
@@ -942,8 +961,10 @@
                     html += '<span class="selected" cur="salary"><a href="javascript:void(0)">' + filter[i] + '</a><span class="del" style="text-indent:-9999px" onclick="filterSalary(this)">不限</span></span>';
                 } else if (i == "experience") {
                     html += '<span class="selected" cur="experience"><a href="javascript:void(0)">' + filter[i] + '</a><span class="del" style="text-indent:-9999px" onclick="filterExperience(this)">不限</span></span>';
-                } else if (i == "ori_employertype") {
+                } else if (i == "employertype") {
                     html += '<span class="selected" cur="employertype"><a href="javascript:void(0)">' + filter[i] + '</a><span class="del" style="text-indent:-9999px" onclick="filterEmployertype(this)">不限</span></span>';
+                } else if (i == "size") {
+                    html += '<span class="selected" cur="size"><a href="javascript:void(0)">' + filter[i] + '</a><span class="del" style="text-indent:-9999px" onclick="filterEmployertype(this)">不限</span></span>';
                 }
 
             }
@@ -979,9 +1000,18 @@
     }
 
     function filterEmployertype(obj) {
-        listfilter("ori_employertype", obj.innerText);
+        listfilter("employertype", obj.innerText);
         $("#s-employertype dl dt span").html(obj.innerText);
     }
 
+    function filterSize(obj) {
+        listfilter("size", obj.innerText);
+        $("#s-size dl dt span").html(obj.innerText);
+    }
+
+    function listsort(str) {
+        sort = str;
+        listfunction(0);
+    }
 </script>
 </html>

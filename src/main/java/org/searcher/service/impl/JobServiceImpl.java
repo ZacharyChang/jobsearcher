@@ -45,7 +45,7 @@ public class JobServiceImpl implements JobService{
             job.setDescription((String) searchHitFields.getSource().get("description"));
             job.setExperience((String) searchHitFields.getSource().get("ori_experience"));
             job.setDistrict((String) searchHitFields.getSource().get("district"));
-            job.setSize(searchHitFields.getSource().get("size").toString());
+            job.setNumber(searchHitFields.getSource().get("number").toString());
             job.setStartDate((String) searchHitFields.getSource().get("startdate"));
             jobList.add(job);
         }
@@ -58,8 +58,8 @@ public class JobServiceImpl implements JobService{
     }
 
     @Override
-    public List<Job> searchWithFilter(String city, String str, Map<String, String> filter, int size, int page) {
-        SearchResponse response = jobDao.queryWithFilter(city, str, filter, size, page);
+    public List<Job> searchWithFilter(String city, String str, Map<String, String> filter, String sort, int size, int page) {
+        SearchResponse response = jobDao.queryWithFilter(city, str, filter, sort, size, page);
         Job job;
         List<Job> jobList = new ArrayList<>();
         for (SearchHit searchHitFields : response.getHits().getHits()) {
@@ -74,7 +74,7 @@ public class JobServiceImpl implements JobService{
             job.setExperience((String) searchHitFields.getSource().get("ori_experience"));
             job.setEducation((String) searchHitFields.getSource().get("education"));
             job.setDistrict((String) searchHitFields.getSource().get("district"));
-            job.setSize(searchHitFields.getSource().get("size").toString());
+            job.setNumber(searchHitFields.getSource().get("number").toString());
             job.setStartDate((String) searchHitFields.getSource().get("startdate"));
             jobList.add(job);
         }
@@ -83,7 +83,7 @@ public class JobServiceImpl implements JobService{
 
     @Override
     public long getFilterSize(String city, String str, Map<String, String> filter) {
-        return jobDao.queryWithFilter(city, str, filter, 0, 0).getHits().getTotalHits();
+        return jobDao.queryWithFilter(city, str, filter, "", 0, 0).getHits().getTotalHits();
     }
 
 //    @Override

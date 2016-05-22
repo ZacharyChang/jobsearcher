@@ -38,12 +38,16 @@ public class MainController {
     }
 
     @RequestMapping(value = "/new", method = RequestMethod.GET)
-    public String newsearch(@RequestParam("query") String queryString, @RequestParam("city") String city, Model model) {
+    public String newsearch(@RequestParam(value = "query", required = false) String queryString, @RequestParam("city") String city, Model model) {
 //        List<Job> jobList= jobService.searchJob(queryString,9,1);
 //        if(jobList!=null&&jobList.size()>0){
 //            model.addAttribute("result",jobList);
 //        }
-        model.addAttribute("query", queryString);
+        if (queryString == null) {
+            model.addAttribute("query", "");
+        } else {
+            model.addAttribute("query", queryString);
+        }
         model.addAttribute("city", city);
         model.addAttribute("districts", jobService.getDistrictsByCity(city));
         return "new";
@@ -51,17 +55,11 @@ public class MainController {
 
     @RequestMapping(value = "/result", method = {RequestMethod.POST, RequestMethod.GET})
     @ResponseBody
-    public Map<String, Object> result(@RequestParam("query") String queryString, @RequestParam(value = "city") String city, @RequestParam("size") int size, @RequestParam("page") int page, @RequestParam(value = "data", required = false) String filter) {
+    public Map<String, Object> result(@RequestParam("query") String queryString, @RequestParam(value = "city") String city, @RequestParam("size") int size, @RequestParam("page") int page, @RequestParam(value = "filter", required = false) String filter, @RequestParam(value = "sort", required = false) String sort) {
         Map<String, Object> resultMap = new HashMap<>();
-        logger.info("get request.");
-        logger.info(filter.toString());
-        System.out.println(city);
 //        if (null != filter && !"{}" .equals(filter)) {
-            logger.info(filter.toString());
-            Map<String, String> map = (Map<String, String>) JSONObject.parse(filter);
-
-            System.out.println(city);
-        resultMap.put("result", jobService.searchWithFilter(city, queryString, map, size, page));
+        Map<String, String> map = (Map<String, String>) JSONObject.parse(filter);
+        resultMap.put("result", jobService.searchWithFilter(city, queryString, map, sort, size, page));
         resultMap.put("size", jobService.getFilterSize(city, queryString, map));
 //        } else {
 //            resultMap.put("result", jobService.searchJob(city,queryString, size, page));

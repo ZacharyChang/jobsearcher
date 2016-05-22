@@ -15,7 +15,7 @@ public interface JobService {
 
     long getSearchSize(String city, String str);
 
-    List<Job> searchWithFilter(String city, String str, Map<String, String> filter, int size, int page);
+    List<Job> searchWithFilter(String city, String str, Map<String, String> filter, String sort, int size, int page);
 
     long getFilterSize(String city, String str, Map<String, String> filter);
 

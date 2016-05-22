@@ -13,7 +13,7 @@ public class Job {
     private String education;
     private String experience;
     private String district;
-    private String size; //人数
+    private String number; //人数
     private String startDate;
     private String description;
 
@@ -66,12 +66,12 @@ public class Job {
         this.district = district;
     }
 
-    public String getSize() {
-        return size;
+    public String getNumber() {
+        return number;
     }
 
-    public void setSize(String size) {
-        this.size = size;
+    public void setNumber(String size) {
+        this.number = size;
     }
 
     public String getStartDate() {
