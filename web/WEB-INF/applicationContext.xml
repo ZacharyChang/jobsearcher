@@ -16,4 +16,13 @@
     <context:component-scan base-package="org.searcher.service.*"/>
     <!-- 自动扫描(自动注入) -->
     <context:component-scan base-package="org.searcher.dao.*"/>
+
+    <!-- spring的属性加载器，加载properties文件中的属性 -->
+    <bean id="propertyConfigurer"
+          class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+        <property name="location">
+            <value>classpath:/elastic.properties</value>
+        </property>
+        <property name="fileEncoding" value="utf-8"/>
+    </bean>
 </beans>

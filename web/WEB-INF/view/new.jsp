@@ -35,7 +35,7 @@
     </script>
 
 
-    <link rel="stylesheet" type="text/css" href="/css/jobs_b136be8.css"/>
+    <link rel="stylesheet" type="text/css" href="/css/search.css"/>
     <script type="text/javascript" src="/js/jquery-1.11.1.min.js"></script>
 </head>
 <body>
@@ -615,23 +615,22 @@
                 </dl>
 
             </div>
-            <div class="filter-welfare">
-                <dl>
-                    <dt>福利：</dt>
-                    <dd data="0_0"><a href="javascript:void(0)" data="welfare:">不限</a></dd>
-                    <dd><label for="wxyj"><input type="checkbox" name="wxyj" id="wxyj" value="五险一金"
-                                                 data=""/>五险一金</label></dd>
-                    <dd><label for="ndly"><input type="checkbox" name="ndly" id="ndly" value="年度旅游"/>年度旅游</label></dd>
-                    <dd><label for="cb"><input type="checkbox" name="cb" id="cb" value="餐补"/>餐补</label></dd>
-                    <dd><label for="fb"><input type="checkbox" name="fb" id="fb" value="房补"/>房补</label></dd>
-                    <dd><label for="txbt"><input type="checkbox" name="txbt" id="txbt" value="通讯补贴"/>通讯补贴</label></dd>
-                    <dd><label for="jxjj"><input type="checkbox" name="jxjj" id="jxjj" value="绩效奖金"/>绩效奖金</label></dd>
-                    <dd><label for="ndsx"><input type="checkbox" name="ndsx" id="ndsx" value="年底双薪"/>年底双薪</label></dd>
-                    <dd><label for="nzfh"><input type="checkbox" name="nzfh" id="nzfh" value="年终分红"/>年终分红</label></dd>
-                    <dd><label for="jbbz"><input type="checkbox" name="jbbz" id="jbbz" value="加班补助"/>加班补助</label></dd>
-                </dl>
-
-            </div>
+            <%--<div class="filter-welfare">--%>
+            <%--<dl>--%>
+            <%--<dt>福利：</dt>--%>
+            <%--<dd data="0_0"><a href="javascript:void(0)" data="welfare:">不限</a></dd>--%>
+            <%--<dd><label for="wxyj"><input type="checkbox" name="wxyj" id="wxyj" value="五险一金"--%>
+            <%--data=""/>五险一金</label></dd>--%>
+            <%--<dd><label for="ndly"><input type="checkbox" name="ndly" id="ndly" value="年度旅游"/>年度旅游</label></dd>--%>
+            <%--<dd><label for="cb"><input type="checkbox" name="cb" id="cb" value="餐补"/>餐补</label></dd>--%>
+            <%--<dd><label for="fb"><input type="checkbox" name="fb" id="fb" value="房补"/>房补</label></dd>--%>
+            <%--<dd><label for="txbt"><input type="checkbox" name="txbt" id="txbt" value="通讯补贴"/>通讯补贴</label></dd>--%>
+            <%--<dd><label for="jxjj"><input type="checkbox" name="jxjj" id="jxjj" value="绩效奖金"/>绩效奖金</label></dd>--%>
+            <%--<dd><label for="ndsx"><input type="checkbox" name="ndsx" id="ndsx" value="年底双薪"/>年底双薪</label></dd>--%>
+            <%--<dd><label for="nzfh"><input type="checkbox" name="nzfh" id="nzfh" value="年终分红"/>年终分红</label></dd>--%>
+            <%--<dd><label for="jbbz"><input type="checkbox" name="jbbz" id="jbbz" value="加班补助"/>加班补助</label></dd>--%>
+            <%--</dl>--%>
+            <%--</div>--%>
 
             <div class="filter-district">
                 <dl>
@@ -743,10 +742,13 @@
         <div id="job-list-tools" class="job-list-tools">
             <div class="sort-tabs" id="sort-tabs">
                 <ul>
-                    <li class="active" flag="" id="default-sort"><a href="javascript:void(0)"><span>默认排序</span></a></li>
-                    <li flag="5"><a href="javascript:void(0)" onclick="listsort('startdate')"><span>按发布时间排序</span></a>
+                    <li class="active" id="sort-"><a href="javascript:void(0)" onclick="listsort('')"><span>默认排序</span></a>
                     </li>
-                    <li flag="4"><a href="javascript:void(0)" onclick="listsort('enddate')"><span>按终止日期排序</span></a>
+                    <li id="sort-startdate"><a href="javascript:void(0)"
+                                               onclick="listsort('startdate')"><span>按发布时间排序</span></a>
+                    </li>
+                    <li id="sort-enddate"><a href="javascript:void(0)"
+                                             onclick="listsort('enddate')"><span>按终止日期排序</span></a>
                     </li>
                 </ul>
             </div>
@@ -891,6 +893,7 @@
                 $("#feed-list").html(html);
                 $("#feed-list").css("display", "block");
                 $("#notice").css("display", "none");
+                $("#pagination").css("display", "block");
                 $("#pager_" + currentPage).removeClass("active");
                 currentPage = page;
                 pager(page, Math.ceil(hits / size) - 1);
@@ -1011,7 +1014,9 @@
 
     function listsort(str) {
         sort = str;
+        $("#sort-tabs ul li").removeClass("active");
         listfunction(0);
+        $("#sort-" + str).addClass("active");
     }
 </script>
 </html>

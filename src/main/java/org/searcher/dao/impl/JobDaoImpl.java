@@ -12,10 +12,12 @@ import org.elasticsearch.search.aggregations.AggregationBuilders;
 import org.elasticsearch.search.sort.SortBuilder;
 import org.elasticsearch.search.sort.SortOrder;
 import org.searcher.dao.JobDao;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Repository;
 
 import java.net.InetAddress;
 import java.net.UnknownHostException;
+import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -23,14 +25,16 @@ import java.util.Map;
  */
 @Repository("JobDao")
 public class JobDaoImpl implements JobDao {
-    public String hostName = "localhost";
-    private int port = 9300;
+    @Value("${es.ip}")
+    public String ip;
+    @Value("${es.port}")
+    private String port;
 
     public SearchResponse queryByString(String city, String queryString, int size, int page) {
         try {
             Client client = TransportClient.builder().build()
-                    .addTransportAddress(new InetSocketTransportAddress(InetAddress.getByName(hostName), port));
-            SearchResponse response = client.prepareSearch("newsearch")
+                    .addTransportAddress(new InetSocketTransportAddress(InetAddress.getByName(ip), Integer.parseInt(port)));
+            SearchResponse response = client.prepareSearch("search")
                     .setTypes(city)
                     .setSearchType(SearchType.DFS_QUERY_THEN_FETCH)
                     .setQuery(QueryBuilders.queryStringQuery(queryString))                 // Query
@@ -70,8 +74,8 @@ public class JobDaoImpl implements JobDao {
         try {
             //开启客户端
             Client client = TransportClient.builder().build()
-                    .addTransportAddress(new InetSocketTransportAddress(InetAddress.getByName(hostName), port));
-            SearchRequestBuilder searchRequestBuilder = client.prepareSearch("newsearch")
+                    .addTransportAddress(new InetSocketTransportAddress(InetAddress.getByName(ip), Integer.parseInt(port)));
+            SearchRequestBuilder searchRequestBuilder = client.prepareSearch("search")
                     .setTypes(city)
                     .setSearchType(SearchType.DFS_QUERY_THEN_FETCH)
                     .setFrom(page * size).setSize(size).setExplain(false);
@@ -80,6 +84,7 @@ public class JobDaoImpl implements JobDao {
                 searchRequestBuilder.setQuery(QueryBuilders.queryStringQuery(queryString));                 // Query
             }
             //设置过滤器
+            System.out.println(filter.size());
             if (filter.size() > 0) {
                 BoolQueryBuilder boolQueryBuilder = QueryBuilders.boolQuery();
                 for (Map.Entry entry : filter.entrySet()) {
@@ -103,7 +108,7 @@ public class JobDaoImpl implements JobDao {
     public SearchResponse getDistrictsByCity(String city) {
         try {
             Client client = TransportClient.builder().build()
-                    .addTransportAddress(new InetSocketTransportAddress(InetAddress.getByName(hostName), port));
+                    .addTransportAddress(new InetSocketTransportAddress(InetAddress.getByName(ip), Integer.parseInt(port)));
             SearchResponse sr = client.prepareSearch().setTypes(city)
                     .addAggregation(
                             AggregationBuilders.terms("all_district").field("district")

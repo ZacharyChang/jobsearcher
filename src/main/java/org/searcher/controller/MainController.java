@@ -22,12 +22,12 @@ public class MainController {
     private Logger logger = Logger.getLogger("controller-main");
     @Autowired
     private JobService jobService;
-    @RequestMapping(value = "/", method = RequestMethod.GET)
-    public String index() {
-        return "index";
-    }
+//    @RequestMapping(value = "/", method = RequestMethod.GET)
+//    public String index() {
+//        return "index";
+//    }
 
-    @RequestMapping(value="/search",method = RequestMethod.GET)
+    @RequestMapping(value = "/search", method = RequestMethod.GET)
     public String search(@RequestParam("query") String queryString, Model model) {
 //        List<Job> jobList= jobService.searchJob(queryString,9,1);
 //        if(jobList!=null&&jobList.size()>0){
@@ -37,17 +37,19 @@ public class MainController {
         return "search";
     }
 
-    @RequestMapping(value = "/new", method = RequestMethod.GET)
-    public String newsearch(@RequestParam(value = "query", required = false) String queryString, @RequestParam("city") String city, Model model) {
+    @RequestMapping(value = "/", method = RequestMethod.GET)
+    public String newsearch(@RequestParam(value = "query", required = false) String queryString, @RequestParam(value = "city", required = false) String city, Model model) {
 //        List<Job> jobList= jobService.searchJob(queryString,9,1);
 //        if(jobList!=null&&jobList.size()>0){
 //            model.addAttribute("result",jobList);
 //        }
         if (queryString == null) {
-            model.addAttribute("query", "");
-        } else {
-            model.addAttribute("query", queryString);
+            queryString = "";
         }
+        if (city == null) {
+            city = "武汉";
+        }
+        model.addAttribute("query", queryString);
         model.addAttribute("city", city);
         model.addAttribute("districts", jobService.getDistrictsByCity(city));
         return "new";
