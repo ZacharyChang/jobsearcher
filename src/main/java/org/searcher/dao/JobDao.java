@@ -12,9 +12,9 @@ import java.util.Map;
 public interface JobDao {
     SearchResponse queryByString(String city, String queryString, int size, int page);
 
-//    public SearchResponse filterByEducation(String city,String queryString, String education, int size, int page);
-
     SearchResponse queryWithFilter(String city, String queryString, Map<String, String> filter, String sort, int size, int page);
 
     SearchResponse getDistrictsByCity(String city);
+
+    SearchResponse getNumberByName(String city, String name);
 }

@@ -33,17 +33,17 @@
             s.parentNode.insertBefore(hm, s);
         })();
     </script>
-
-
     <link rel="stylesheet" type="text/css" href="/css/search.css"/>
     <script type="text/javascript" src="/js/jquery-1.11.1.min.js"></script>
+    <script src="/js/echarts.min.js"></script>
+    <script src="/js/layer/layer.js"></script>
 </head>
 <body>
 <header>
 
     <div class="header">
         <div class="head-inner">
-            <div class="logo"><a href="/new">招聘信息搜索</a></div>
+            <div class="logo"><a href="/">招聘信息搜索</a></div>
             <div id="local-filter" class="local-filter">
                 <dl>
                     <dt class="current-city" id="current-city"><span>[${city}]</span></dt>
@@ -60,7 +60,6 @@
                                     </ul>
                                 </div>
                                 <div class="tabs-body">
-
                                     <div class="tabs-ctn-item hot-cities active">
                                         <dl>
                     <dt>华北</dt>
@@ -230,7 +229,6 @@
                     <dd><a href="?query=&city=%E6%BB%81%E5%B7%9E">滁州</a></dd>
                     <dd><a href="?query=&city=%E6%A5%9A%E9%9B%84">楚雄</a></dd>
                 </dl>
-
 
                 <dl>
                     <dt>D</dt>
@@ -564,8 +562,6 @@
                     <dd><a href="?query=&city=%E9%81%B5%E4%B9%89">遵义</a></dd>
                 </dl>
             </div>
-
-
         </div>
     </div>
 
@@ -574,9 +570,9 @@
     </dl>
     </div>
     <div class="search-box">
-        <form action="/new" id="search-form">
+        <form action="/" id="search-form">
             <span><input type="text" name="query" id="hd-kw" autocomplete="off" class="query" value="${query}"/></span>
-            <span><input type="submit" id="hd-su" class="submit-btn" value="搜索"/></span>
+            <span><input type="submit" id="hd-su" class="submit-btn" value="搜索"/>
             <input type="hidden" name="city" class="city" value="${city}">
         </form>
     </div>
@@ -602,6 +598,7 @@
                     <dd><a href="javascript:void(0)" onclick="filterSalary(this)">3000-5000</a></dd>
                     <dd><a href="javascript:void(0)" onclick="filterSalary(this)">5000-8000</a></dd>
                     <dd><a href="javascript:void(0)" onclick="filterSalary(this)">8000-12000</a></dd>
+                    <dd><a href="javascript:void(0)" onclick="charts('salary')" style="color:#f7a20e">统计图表</a></dd>
                     <%--<dd>--%>
                     <%--<div id="salary-custom">--%>
                     <%--<p>自定义：<span class="custom-input-salary"><input type="text" maxlength="7" placeholder="￥"--%>
@@ -639,6 +636,7 @@
                     <c:forEach items="${districts}" var="district">
                         <dd><a href="javascript:void(0)" onclick="filterDistrict(this)">${district}</a></dd>
                     </c:forEach>
+                    <dd><a href="javascript:void(0)" onclick="charts('district')" style="color:#f7a20e">统计图表</a></dd>
                 </dl>
             </div>
             <div class="filter-more">
@@ -656,6 +654,7 @@
                     <dd data="education:本科" onclick="filterEducation(this)">本科</dd>
                     <dd data="education:硕士" onclick="filterEducation(this)">硕士</dd>
                     <dd data="education:博士" onclick="filterEducation(this)">博士</dd>
+                    <dd onclick="charts('education')" style="color:#f7a20e">统计图表</dd>
                     <%--<dd data="education:MBA/EMB">MBA/EMBA</dd>--%>
                 </dl>
 
@@ -671,6 +670,7 @@
             <dd data="experience:3-5年" onclick="filterExperience(this)">3-5年</dd>
             <dd data="experience:5-10年" onclick="filterExperience(this)">5-10年</dd>
             <dd data="experience:10年以上" onclick="filterExperience(this)">10年以上</dd>
+            <dd onclick="charts('experience')" style="color:#f7a20e">统计图表</dd>
             </dl>
 
         </div>
@@ -691,6 +691,7 @@
         <dd data="employertype:政府机关" onclick="filterEmployertype(this)">政府机关</dd>
         <dd data="employertype:个人企业" onclick="filterEmployertype(this)">个人企业</dd>
         <dd data="employertype:其他" onclick="filterEmployertype(this)">其他</dd>
+        <dd onclick="charts('employertype')" style="color:#f7a20e">统计图表</dd>
         </dl>
     </div>
     </dd>
@@ -705,6 +706,7 @@
     <dd onclick="filterSize(this)">100-499人</dd>
     <dd onclick="filterSize(this)">1000-9999人</dd>
     <dd onclick="filterSize(this)">10000人以上</dd>
+    <dd onclick="charts('size')" style="color:#f7a20e">统计图表</dd>
     </dl>
     </div>
     </dd>
@@ -818,10 +820,129 @@
     var url = '/result?query=${query}&city=${city}';
     var filter = {};
     var sort = "";
+
     $(function () {
 //        var page = $(".pagination").val();
         listfunction(currentPage);
     });
+
+    //弹出一个页面层
+    $('#charts').on('click', function () {
+        alert(this.className);
+        layer.open({
+            type: 1,
+            area: ['600px', '360px'],
+            shadeClose: true, //点击遮罩关闭
+            content: '\<\div id="main" style="width:600px;height:300px">\<\/div>'
+        });
+        var myChart = echarts.init(document.getElementById('main'));
+        var array = [];
+        var names = [];
+        $.post("/charts", {
+            "city": "${city}"
+        }, function (jsonObj) {
+            for (var key in jsonObj) {
+                array.push(new district(key, jsonObj[key]));
+                names.push(key);
+            }
+            // 指定图表的配置项和数据
+            option = {
+                title: {
+                    text: '${city}市工作分布情况',
+                    subtext: '仅供参考',
+                    x: 'center'
+                },
+                tooltip: {
+                    trigger: 'item',
+                    formatter: "{a} <br/>{b} : {c} ({d}%)"
+                },
+                legend: {
+                    orient: 'vertical',
+                    left: 'left',
+                    data: names
+                },
+                series: [
+                    {
+                        name: '工作地点',
+                        type: 'pie',
+                        radius: '55%',
+                        center: ['50%', '60%'],
+                        data: array,
+                        itemStyle: {
+                            emphasis: {
+                                shadowBlur: 10,
+                                shadowOffsetX: 0,
+                                shadowColor: 'rgba(0, 0, 0, 0.5)'
+                            }
+                        }
+                    }
+                ]
+            };
+            // 使用刚指定的配置项和数据显示图表。
+            myChart.setOption(option);
+        });
+    });
+
+    function charts(aggsName) {
+        layer.open({
+            type: 1,
+            area: ['600px', '360px'],
+            shadeClose: true, //点击遮罩关闭
+            content: '\<\div id="main" style="width:600px;height:300px">\<\/div>'
+        });
+        //loading层
+        var index = layer.load(1, {
+            shade: [0.1, '#fff'] //0.1透明度的白色背景
+        });
+        var myChart = echarts.init(document.getElementById('main'));
+        var array = [];
+        var names = [];
+        $.post("/charts", {
+            "city": "${city}",
+            "name": aggsName
+        }, function (jsonObj) {
+            for (var key in jsonObj) {
+                array.push(new district(key, jsonObj[key]));
+                names.push(key);
+            }
+            // 指定图表的配置项和数据
+            option = {
+                title: {
+                    text: '${city}市工作分布情况',
+                    subtext: '仅供参考',
+                    x: 'center'
+                },
+                tooltip: {
+                    trigger: 'item',
+                    formatter: "{a} <br/>{b} : {c} ({d}%)"
+                },
+                legend: {
+                    orient: 'vertical',
+                    left: 'left',
+                    data: names
+                },
+                series: [
+                    {
+                        name: aggsName,
+                        type: 'pie',
+                        radius: '55%',
+                        center: ['50%', '60%'],
+                        data: array,
+                        itemStyle: {
+                            emphasis: {
+                                shadowBlur: 10,
+                                shadowOffsetX: 0,
+                                shadowColor: 'rgba(0, 0, 0, 0.5)'
+                            }
+                        }
+                    }
+                ]
+            };
+            // 使用刚指定的配置项和数据显示图表。
+            myChart.setOption(option);
+            layer.close(index);
+        });
+    }
 
     $("#local-filter").hover(function () {
         $("#local-filter").addClass("expand");
@@ -851,7 +972,6 @@
     })
     //分页
     function listfunction(page) {
-//        $(".pagination").val(page);
         $.post(url + '&size=' + size + '&page=' + page, {
             "filter": JSON.stringify(filter),
             "sort": sort
@@ -867,14 +987,6 @@
                 $("#feed-list").css("display", "none");
             } else {
                 for (var key in jsonData) {
-//                html += '<li><a href="';
-//                html += jsonData[key].url + '" target="_blank">';
-//                html += '<div class="tab_desc">';
-//                html += '<h3 style="overflow: hidden;white-space: nowrap;text-overflow: ellipsis;">' + jsonData[key].name + '</h3>';
-//                html += '<h4>人数：XX</h4>';
-//                html += '<h4>工资：' + jsonData[key].salary + '</h4>';
-//                html += '<h4>' + jsonData[key].officailName + '</h4>';
-//                html += '</div></a></li>';
                     html += '<div class="jobs-item odd jobs-item-expand"><dl><dt><a href="';
                     html += jsonData[key].url + '"target="_blank">' + jsonData[key].name + '</a>';
                     html += '<span class="jobs-company">' + jsonData[key].officialName + '</span></dt>';
@@ -882,7 +994,7 @@
                     html += '<dd class="jobs-deal whitout-welfare"><p class="feed-item-salary feed-item-salary-num">' + jsonData[key].salary + '</p>';
                     html += '</dd><dd class="jobs-source"><a href="' + jsonData[key].sourceLink + '" target="_blank">' + jsonData[key].source + '</a></dd><dd class="jobs-time">' + jsonData[key].startDate + '</dd><dd class="jobs-btn"><a href="javascript:void(0)" log="mod=joblist&act=beha&index=29" class="item-expand-btn">x</a></dd><dd class="jobs-discription">';
                     html += '<div class="detail"><p class="detail-item">';
-                    if (jsonData[key].size != "None") {
+                    if (jsonData[key].number != "") {
                         html += '<span><b>招聘人数：</b>' + jsonData[key].number + '</span>';
                     } else {
                         html += '<span><b>招聘人数：</b>若干人</span>';
@@ -908,15 +1020,8 @@
                 });
             }
             $(".result-num").html('共<b>' + hits + '</b>条招聘结果');
-
         });
     }
-
-    //    function showPage(newpage){
-    //
-    //        alert("show :"+newPage);
-    //        listfunction(newpage);
-    //    }
 
     function pager(active, all) {
         var html = '<p><span class="pagination-inner"><span id="pagination-nums">';
@@ -942,7 +1047,6 @@
         }
         html += '<a href="javascript:listfunction(' + all + ')" class="ep">尾页</a></span></p>';
         $("#pagination").html(html);
-
     }
 
     function listfilter(key, value) {
@@ -967,7 +1071,7 @@
                 } else if (i == "employertype") {
                     html += '<span class="selected" cur="employertype"><a href="javascript:void(0)">' + filter[i] + '</a><span class="del" style="text-indent:-9999px" onclick="filterEmployertype(this)">不限</span></span>';
                 } else if (i == "size") {
-                    html += '<span class="selected" cur="size"><a href="javascript:void(0)">' + filter[i] + '</a><span class="del" style="text-indent:-9999px" onclick="filterEmployertype(this)">不限</span></span>';
+                    html += '<span class="selected" cur="size"><a href="javascript:void(0)">' + filter[i] + '</a><span class="del" style="text-indent:-9999px" onclick="filterSize(this)">不限</span></span>';
                 }
 
             }
@@ -1018,5 +1122,11 @@
         listfunction(0);
         $("#sort-" + str).addClass("active");
     }
+
+    function district(name, value) {
+        this.name = name;
+        this.value = value;
+    }
+
 </script>
 </html>

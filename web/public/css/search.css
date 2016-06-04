@@ -955,7 +955,7 @@
     padding: 12px 17px 12px 26px;
     border-bottom: 1px solid #ededed;
     font-family: arial;
-    cursor: pointer;
+    /*cursor: pointer;*/
     zoom: 1
 }
 
@@ -1089,7 +1089,7 @@
     width: 10px;
     height: 25px;
     text-indent: -9999px;
-    cursor: pointer
+    /*cursor: pointer*/
 }
 
 .job-list .feeds .jobs-item .jobs-btn a {
@@ -1606,7 +1606,7 @@
     display: block;
     height: 34px;
     width: 111px;
-    background: url(/static/jobs/widget/header/imgs/logo_zp_237dbd8.png) no-repeat;
+    background: url(/images/logo.png) no-repeat;
     _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='/static/jobs/widget/header/imgs/logo_zp_237dbd8.png');
     _background: 0 0;
     text-indent: -999px

@@ -19,9 +19,9 @@ public interface JobService {
 
     long getFilterSize(String city, String str, Map<String, String> filter);
 
-//    public List<Job> searchFilterEducation(String str, String education, int size, int page);
-//
-//    public long getFilterEducationSize(String str, String education);
-
     List<String> getDistrictsByCity(String city);
+
+    Map<String, Long> getDistrictsValue(String city);
+
+    public Map<String, Long> getNumberBuName(String city, String name);
 }

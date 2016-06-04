@@ -49,25 +49,6 @@ public class JobDaoImpl implements JobDao {
         return null;
     }
 
-//    public SearchResponse filterByEducation(String city,String queryString, String education, int size, int page) {
-//        try {
-//            Client client = TransportClient.builder().build()
-//                    .addTransportAddress(new InetSocketTransportAddress(InetAddress.getByName(hostName), port));
-//            SearchResponse response = client.prepareSearch("newsearch")
-//                    .setTypes(city)
-//                    .setSearchType(SearchType.DFS_QUERY_THEN_FETCH)
-//                    .setQuery(QueryBuilders.queryStringQuery(queryString))                 // Query
-//                    .setPostFilter(QueryBuilders.prefixQuery("education", education))     // Filter
-//                    .setFrom(page * size).setSize(size).setExplain(false)
-//                    .execute()
-//                    .actionGet();
-//            client.close();
-//            return response;
-//        } catch (UnknownHostException e) {
-//            e.printStackTrace();
-//        }
-//        return null;
-//    }
 
     @Override
     public SearchResponse queryWithFilter(String city, String queryString, Map<String, String> filter, String sort, int size, int page) {
@@ -89,9 +70,9 @@ public class JobDaoImpl implements JobDao {
                 BoolQueryBuilder boolQueryBuilder = QueryBuilders.boolQuery();
                 for (Map.Entry entry : filter.entrySet()) {
                     boolQueryBuilder.must(QueryBuilders.termQuery((String) entry.getKey(), entry.getValue()));
-                }
-                searchRequestBuilder.setPostFilter(boolQueryBuilder);
             }
+                searchRequestBuilder.setPostFilter(boolQueryBuilder);
+        }
             //设置排序方法
             if (!sort.equals("")) {
                 searchRequestBuilder.addSort(sort, SortOrder.DESC);
@@ -101,7 +82,7 @@ public class JobDaoImpl implements JobDao {
             return response;
         } catch (UnknownHostException e) {
             e.printStackTrace();
-        }
+    }
         return null;
     }
 
@@ -112,6 +93,22 @@ public class JobDaoImpl implements JobDao {
             SearchResponse sr = client.prepareSearch().setTypes(city)
                     .addAggregation(
                             AggregationBuilders.terms("all_district").field("district")
+                    )
+                    .execute().actionGet();
+            return sr;
+        } catch (UnknownHostException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public SearchResponse getNumberByName(String city, String name) {
+        try {
+            Client client = TransportClient.builder().build()
+                    .addTransportAddress(new InetSocketTransportAddress(InetAddress.getByName(ip), Integer.parseInt(port)));
+            SearchResponse sr = client.prepareSearch().setTypes(city)
+                    .addAggregation(
+                            AggregationBuilders.terms("all_aggregation").field(name)
                     )
                     .execute().actionGet();
             return sr;

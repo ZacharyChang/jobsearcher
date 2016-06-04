@@ -7,7 +7,7 @@
        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd http://www.springframework.org/schema/tool http://www.springframework.org/schema/tool/spring-tool.xsd http://www.springframework.org/schema/cache http://www.springframework.org/schema/cache/spring-cache.xsd http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc.xsd">
     <!--指明 controller 所在包，并扫描其中的注解-->
     <context:component-scan base-package="org.searcher.controller"/>
-    <mvc:annotation-driven>
+    <mvc:annotation-driven><!--添加Spring返回JSON功能-->
         <mvc:message-converters register-defaults="true">
             <bean id="fastJsonHttpMessageConverter"
                   class="com.alibaba.fastjson.support.spring.FastJsonHttpMessageConverter">
@@ -19,11 +19,11 @@
             </bean>
         </mvc:message-converters>
     </mvc:annotation-driven>
+    <!--添加资源路径-->
     <mvc:resources mapping="/css/**" location="/public/css/"/>
     <mvc:resources mapping="/js/**" location="/public/js/"/>
     <mvc:resources mapping="/images/**" location="/public/images/"/>
-    <!--ViewResolver 视图解析器-->
-    <!--用于支持Servlet、JSP视图解析-->
+    <!--添加ViewResolver 视图解析器-->
     <bean id="jspViewResolver" class="org.springframework.web.servlet.view.InternalResourceViewResolver">
         <property name="viewClass" value="org.springframework.web.servlet.view.JstlView"/>
         <property name="prefix" value="/WEB-INF/view/"/>
